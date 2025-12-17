@@ -98,15 +98,21 @@ const App: React.FC = () => {
     } catch (error) {
       console.error("Search failed", error);
       
-      let errorMessage = "Something went wrong while connecting to the AI service. Please try again later.";
+      let errorMessage = "I encountered an issue while processing your request. Please try again.";
       
       if (error instanceof Error) {
-         if (error.message.includes('API Key') || error.message.includes('403')) {
-             errorMessage = "The API key is missing or invalid. Please check your configuration.";
-         } else if (error.message.includes('429')) {
-             errorMessage = "We are receiving too many requests right now. Please wait a moment and try again.";
-         } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-             errorMessage = "Please check your internet connection.";
+         const msg = error.message.toLowerCase();
+         
+         if (msg.includes('api key') || msg.includes('403') || msg.includes('permission denied')) {
+             errorMessage = "Unable to authenticate. Please ensure a valid API key is configured.";
+         } else if (msg.includes('429') || msg.includes('quota') || msg.includes('limit')) {
+             errorMessage = "You've hit the usage limit. Please wait a moment before asking another question.";
+         } else if (msg.includes('503') || msg.includes('500') || msg.includes('overloaded')) {
+             errorMessage = "The AI service is temporarily unavailable. Please try again shortly.";
+         } else if (msg.includes('failed to fetch') || msg.includes('network') || msg.includes('connection')) {
+             errorMessage = "Connection failed. Please check your internet connection and try again.";
+         } else if (msg.includes('safety') || msg.includes('blocked')) {
+             errorMessage = "I cannot generate a response for this query due to safety guidelines.";
          }
       }
 
