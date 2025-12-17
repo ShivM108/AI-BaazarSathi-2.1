@@ -1,0 +1,5 @@
+{
+  "name": "BaazarSathi AI",
+  "description": "A high-performance AI search assistant interface powered by Gemini, featuring real-time web grounding, citation rendering, and a clean journalistic aesthetic.",
+  "requestFramePermissions": []
+}
